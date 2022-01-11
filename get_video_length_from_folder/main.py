@@ -12,7 +12,7 @@ from pprint import pprint
 
 from pymediainfo import MediaInfo
 
-INSPECT_DIR = r"C:\Users\Admin\Desktop\Обучающие видео по IT\Python\[WebForMySelf] Django. Полное руководство (2020)"
+INSPECT_DIR = r"C:\Users\Admin\Desktop\Войти в IT\Обучающие видео по IT\Python\[Нетология] Python для работы с данными (2020)"
 
 ALLOWED_FORMATS = (".mp4", ".avi")
 
@@ -85,11 +85,6 @@ def sum_files_times_in_folder(folder, allowed_formats_list):
                 )
                 files_count += 1
     return files_count, all_video_time
-
-
-print(test(
-    r"C:/Users/Admin/Desktop/Обучающие видео по IT/Английский язык/"
-    r"Мария Батхан - Училка первая моя (2019)/Неделя 3/7/1.mp4"))
 
 rez_list = sum_files_times_in_folder(INSPECT_DIR, ALLOWED_FORMATS)
 scaning_folder = INSPECT_DIR
