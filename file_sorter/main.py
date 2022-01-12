@@ -50,6 +50,9 @@ def str_to_time(str_time: str):
 
 
 class PhotoSorter:
+    STAT_FILE_FOR_DUPLICATES = 'stat_duplicate_files.txt'
+    STAT_FILE_FOR_UNPROCESSED = 'stat_unprocessed_files.txt'
+
     def __init__(
             self,
             unsorted_folder: str,
@@ -78,13 +81,18 @@ class PhotoSorter:
     def _prepare_files_for_statistics(self):
         """Подготовит новые файлы для статистики или очистит пред идущие"""
         with open(
-                os.path.join(self._target_folder, 'stat_duplicate_files.txt'),
+                os.path.join(
+                    self._target_folder,
+                    self.STAT_FILE_FOR_DUPLICATES
+                ),
                 'w'
         ) as fd:
             pass
         with open(
-                os.path.join(self._target_folder,
-                             'stat_unprocessed_files.txt'),
+                os.path.join(
+                    self._target_folder,
+                    self.STAT_FILE_FOR_UNPROCESSED
+                ),
                 'w'
         ) as fd:
             pass
@@ -93,7 +101,7 @@ class PhotoSorter:
         """Сохранит информацию о найденных дубликатах файлов в специальный
         файл статистики"""
         self._add_info_to_file(
-            filename='stat_duplicate_files.txt',
+            filename=self.STAT_FILE_FOR_DUPLICATES,
             list_of_files=self.__duplicate_files,
             default_str='Дубликатов файлов не найдено...'
         )
@@ -102,7 +110,7 @@ class PhotoSorter:
         """Сохранит информацию о найденных дубликатах файлов в специальный
         файл статистики"""
         self._add_info_to_file(
-            filename='stat_unprocessed_files.txt',
+            filename=self.STAT_FILE_FOR_UNPROCESSED,
             list_of_files=self.__unprocessed_files,
             default_str='Нет необработанных файлов...'
         )
