@@ -68,19 +68,69 @@ class PhotoSorter:
         Главный метод-обработчик
         :return: None
         """
-        self.prepare_folder()
-        self.walk_the_files()
-        self.show_unprocessed_files()
-        self.show_duplicate_files()
-        self.say_end()
+        self._prepare_folder()
+        self._prepare_files_for_statistics()
+        self._walk_the_files()
+        self._store_stat_duplicate_files()
+        self._store_stat_unprocessed_files()
+        self._say_end()
 
-    def say_end(self):
+    def _prepare_files_for_statistics(self):
+        """Подготовит новые файлы для статистики или очистит пред идущие"""
+        with open(
+                os.path.join(self._target_folder, 'stat_duplicate_files.txt'),
+                'w'
+        ) as fd:
+            pass
+        with open(
+                os.path.join(self._target_folder,
+                             'stat_unprocessed_files.txt'),
+                'w'
+        ) as fd:
+            pass
+
+    def _store_stat_duplicate_files(self):
+        """Сохранит информацию о найденных дубликатах файлов в специальный
+        файл статистики"""
+        self._add_info_to_file(
+            filename='stat_duplicate_files.txt',
+            list_of_files=self.__duplicate_files,
+            default_str='Дубликатов файлов не найдено...'
+        )
+
+    def _store_stat_unprocessed_files(self):
+        """Сохранит информацию о найденных дубликатах файлов в специальный
+        файл статистики"""
+        self._add_info_to_file(
+            filename='stat_unprocessed_files.txt',
+            list_of_files=self.__unprocessed_files,
+            default_str='Нет необработанных файлов...'
+        )
+
+    def _add_info_to_file(
+            self,
+            filename: str,
+            list_of_files: list,
+            default_str: str = '---'
+    ):
+        """Сохранит информацю о статистике в указанный файл."""
+        with open(
+                os.path.join(self._target_folder, filename),
+                'a'
+        ) as fd:
+            if not self.__duplicate_files:
+                fd.writelines(default_str)
+            else:
+                for count, file in enumerate(list_of_files, start=1):
+                    fd.writelines(f'{count}.\t{file}\n')
+
+    def _say_end(self):
         """Выведет сообщение об окончании работы"""
         print(f"-----------------------------------------------------------")
         print(f"---------- Сортировка файлов окончена! --------------------")
         print(f"-----------------------------------------------------------")
 
-    def prepare_folder(self):
+    def _prepare_folder(self):
         """
         Подготовит структуру папок в папке вывода результата
         """
@@ -94,7 +144,7 @@ class PhotoSorter:
             self.__shadow_folder_struct[file_format] = {}
         print("Структура папок подготовлена.")
 
-    def walk_the_files(self):
+    def _walk_the_files(self):
         """Пройдется по файлам в заданной папке"""
 
         for root, dirs, files in os.walk(self._unsorted_folder):
@@ -107,11 +157,11 @@ class PhotoSorter:
                         full_path_to_file)
                     file_extension = file_extension.lower()
                     if file_extension in self._allowed_formats:
-                        self.process_file(full_path_to_file, file_extension)
+                        self._process_file(full_path_to_file, file_extension)
                     else:
                         self.__unprocessed_files.append(full_path_to_file)
 
-    def show_unprocessed_files(self):
+    def _show_unprocessed_files(self):
         """Выведет в консоль файлы, которые не подошли по формату"""
         if not self.__unprocessed_files:
             print("Все файлы были обработаны...")
@@ -120,7 +170,7 @@ class PhotoSorter:
             for count, file in enumerate(self.__unprocessed_files, start=1):
                 print(f"\t{count}. {file}")
 
-    def show_duplicate_files(self):
+    def _show_duplicate_files(self):
         """Выведет в консоль файлы, которые оказались идентичны уже
         скопированным в папку файлам по ряду параметров (дата создания и
         размер)"""
@@ -131,7 +181,7 @@ class PhotoSorter:
             for count, file in enumerate(self.__duplicate_files, start=1):
                 print(f"\t{count}. {file}")
 
-    def process_file(self, full_path_to_file, file_extension):
+    def _process_file(self, full_path_to_file, file_extension):
         """Обработает файл в соответствии с логикой"""
 
         file_creation_time = str_to_time(
