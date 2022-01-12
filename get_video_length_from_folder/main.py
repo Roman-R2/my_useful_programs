@@ -12,9 +12,9 @@ from pprint import pprint
 
 from pymediainfo import MediaInfo
 
-INSPECT_DIR = r"C:\Users\Admin\Desktop\Войти в IT\Обучающие видео по IT\Python\[Нетология] Python для работы с данными (2020)"
+INSPECT_DIR = r"C:\Users\Admin\Desktop"
 
-ALLOWED_FORMATS = (".mp4", ".avi")
+ALLOWED_FORMATS = (".mp4",)
 
 
 def test(file):
