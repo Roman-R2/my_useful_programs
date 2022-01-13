@@ -1,2 +1,11 @@
-.idea/
-venv/
+### IDE ###
+.idea
+
+### Python ###
+__pycache__/
+
+### VENV ###
+venv_microsoft
+
+### ENV ###
+.env

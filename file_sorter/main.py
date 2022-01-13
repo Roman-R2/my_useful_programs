@@ -19,20 +19,21 @@ Author: Roman Slyusar (https://github.com/Roman-R2)
 import os
 import shutil
 import time
-from tqdm import tqdm
-
 from datetime import datetime
 
+from dotenv import load_dotenv
+from tqdm import tqdm
+
+load_dotenv()
+
 # Папка с исходными, неотсортированными файлами
-UNSORTED_FOLDER = r"C:\Users\Admin\Desktop\test_photo"
+UNSORTED_FOLDER = os.getenv('UNSORTED_FOLDER')
 
 # Папка для результата выполнения скрипта
-TARGET_FOLDER = r"C:\Users\Admin\Desktop\test_photo_sorted"
+TARGET_FOLDER = os.getenv('TARGET_FOLDER')
 # Разрешенные для сортировки форматы
-ALLOWED_FORMATS = (
-    '.jpg',
-    # '.mp4',
-)
+ALLOWED_FORMATS = tuple(os.getenv('ALLOWED_FORMATS').split(','))
+print(ALLOWED_FORMATS)
 
 
 def get_file_id(create_date, bytes_size) -> str:
